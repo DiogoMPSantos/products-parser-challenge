@@ -19,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return 'test';
+        $products = Product::simplePaginate(20);
+        return response()->json($products);
     }
 
     /**
@@ -49,9 +50,17 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($code)
     {
-        //
+        $product = Product::where('code', $code)->get();
+
+        if (!$product->isEmpty()) {
+            return response()->json($product);
+        }else{
+            return response()->json([
+                'message' => 'no results found for code '.$code
+            ]);
+        }
     }
 
     /**
