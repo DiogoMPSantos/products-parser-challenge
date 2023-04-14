@@ -24,27 +24,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Product  $product
@@ -64,26 +43,46 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $code)
     {
-        //
+        $product = Product::where('code', $code)->get();
+
+        try {
+            if (!$product->isEmpty()) {
+
+                $request->validate([
+                    // 'code' => 'required|unique:App\Models\Product',
+                    'status' => 'required|in:draft,trash,published',
+                    'url' => 'url',
+                    'image_url' => 'url',
+                    'imported_t' => 'date'
+                ]);
+                
+                $updated = Product::where('code', $code)->update($request->except('code'));
+
+                if ($updated) {
+                    return response()->json([
+                        'message' => 'Product with code '.$code. ' has been successfully updated',
+                        'product' => ''
+                    ]);
+                }
+
+            }else{
+                return response()->json([
+                    'message' => 'no results found for code '.$code
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
