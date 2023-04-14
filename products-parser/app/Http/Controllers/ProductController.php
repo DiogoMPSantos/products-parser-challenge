@@ -92,9 +92,33 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($code)
     {
-        //
+        $product = Product::where('code', $code)->get();
+
+        try {
+            if (!$product->isEmpty()) {
+
+                $deleted = Product::where('code', $code)->update([
+                    'status' => 'trash'
+                ]);
+
+                if ($deleted) {
+                    return response()->json([
+                        'message' => 'Product with code '.$code. ' has been successfully deleted'
+                    ]);
+                }
+
+            }else{
+                return response()->json([
+                    'message' => 'no results found for code '.$code
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
