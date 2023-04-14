@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('imports_historic', function (Blueprint $table) {
             $table->id();
             $table->text('name');
-            $table->enum('status', ['success', 'error']);
-            $table->text('log');
+            $table->enum('status', ['processing', 'completed', 'error']);
+            $table->text('log')->nullable();
             $table->timestamps();
         });
     }
