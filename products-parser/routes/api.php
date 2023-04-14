@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('products', ProductController::class);
+Route::resource('products', ProductController::class)->middleware('api_token');
 
 //API/Cron Details
 Route::get('/', function () {
