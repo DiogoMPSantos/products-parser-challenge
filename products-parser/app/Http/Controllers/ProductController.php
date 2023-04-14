@@ -34,7 +34,9 @@ class ProductController extends Controller
         $product = Product::where('code', $code)->get();
 
         if (!$product->isEmpty()) {
-            return response()->json($product);
+            return response()->json([
+                'product' => $product
+            ]);
         }else{
             return response()->json([
                 'message' => 'no results found for code '.$code
@@ -69,7 +71,7 @@ class ProductController extends Controller
                 if ($updated) {
                     return response()->json([
                         'message' => 'Product with code '.$code. ' has been successfully updated',
-                        'product' => ''
+                        'product' => $product
                     ]);
                 }
 
