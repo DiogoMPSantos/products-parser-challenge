@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('code');
+            $table->text('code')->unique();
             $table->text('url');
             $table->text('creator');            
             $table->date('imported_t');
