@@ -25,9 +25,17 @@ Route::resource('products', ProductController::class);
 //API/Cron Details
 Route::get('/', function () {
     $historic = ImportsHistoric::whereNotNull('log')->orderByDesc('updated_at')->first();
-    return [
-        'API Version' => 1,
-        'Crontab Log' => $historic->log,
-        'Crontab Last Execution' => date_format($historic->updated_at, 'd-m-Y H:i:s'),
-    ];
+    
+    if (isset($historic)) {
+        return response()->json([
+            'api_version' => 1,
+            'crontab_log' => $historic->log,
+            'crontab_last_execution' => date_format($historic->updated_at, 'd-m-Y H:i:s'),
+        ]);
+    }else{
+        return response()->json([
+            'api_version' => 1,
+            'crontab_info' => 'Crontab has not been run yet',
+        ]);
+    }
 });
