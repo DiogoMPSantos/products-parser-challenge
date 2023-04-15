@@ -16,7 +16,7 @@ This is a challenge by [Coodesh](https://coodesh.com/)
    - docker-compose build <br />
  ### Subir container docker
    - docker-compose up <br />
- ### Adiconar enviroment file
+ ### Adicionar enviroment file
    - docker-compose exec php cp .env.example .env <br />
  ### Gerar chave da aplicação
    - docker-compose exec php php artisan key:generate <br />
