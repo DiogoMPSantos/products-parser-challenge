@@ -66,9 +66,10 @@ class ProductController extends Controller
                     'imported_t' => 'date'
                 ]);
                 
-                $updated = Product::where('code', $code)->update($request->except('code'));
+                $updated = Product::where('code', $code)->update($request->except('code', 'api_token'));
 
                 if ($updated) {
+                    $product = Product::where('code', $code)->get();
                     return response()->json([
                         'message' => 'Product with code '.$code. ' has been successfully updated',
                         'product' => $product
