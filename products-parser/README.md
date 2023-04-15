@@ -12,17 +12,17 @@ This is a challenge by [Coodesh](https://coodesh.com/)
  - API Key
 
  ## Instruções
- Build de imagens criadas <br />
-   - docker-compose build
- Subir container docker <br />
-   - docker-compose up
- Adiconar enviroment file <br />
-   - docker-compose exec php cp .env.example .env
- Gerar chave da aplicação <br />
-   - docker-compose exec php php artisan key:generate
- Rodar migrations no banco <br />
-   - docker-compose exec php php artisan migrate:fresh --seed
- Rodar link da pasta storage e adionar permissoes  <br />
+ ### Build de imagens criadas
+   - docker-compose build <br />
+ ### Subir container docker
+   - docker-compose up <br />
+ ### Adiconar enviroment file
+   - docker-compose exec php cp .env.example .env <br />
+ ### Gerar chave da aplicação
+   - docker-compose exec php php artisan key:generate <br />
+ ### Rodar migrations no banco
+   - docker-compose exec php php artisan migrate:fresh --seed <br />
+ ### Rodar link da pasta storage e adionar permissoes
    - docker-compose exec php php artisan storage:link
    - docker-compose exec php chmod -R 777 /var/www/html/storage 
  
@@ -40,4 +40,4 @@ This is a challenge by [Coodesh](https://coodesh.com/)
             ------------- Minute (0 - 59)
  ## Documentação da API
  Arquivo api gerado no formato openapi: 3.0.0 dentro de docs/api.yml , pode ser importado dentro do Postman ou a ferramenta desejada. <br />
- API KEY disponivel dentor do .env .example <br />
+ API KEY disponivel dentro do .env.example <br />
