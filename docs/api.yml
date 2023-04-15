@@ -1,6 +1,238 @@
-openapi: 3.0.1
+openapi: 3.0.0
+servers:
+  # products API
+  - description: SwaggerHub API Auto Mocking
+    url: http://localhost/api/
 info:
-  title: DotNet Challenge 20200902
-  description: CRUD Products
-  version: '0.1'
-
+  description: This is a simple API for crud of products
+  version: "1.0.0"
+  title: Simple Products API
+  contact:
+    email: diogo.santtosicet@gmail.com
+tags:
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /products:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - developers
+      summary: list of products
+      operationId: listProducts
+      description: |
+        By passing in the appropriate options, you can search for
+        available inventory in the system
+      parameters:
+        - in: query
+          name: page
+          description: number of page to pagination results
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: bad input parameter
+        '401':
+          description: API key is missing or invalid
+  /products/{code}:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - developers
+      summary: searche single product
+      operationId: searchSingleProduct
+      description: |
+       By passing in the appropriate options, you can search for a single
+       product in the system
+      parameters:
+        - in: path
+          name: code
+          description: pass an search code to return a product
+          required: true
+          example: '0000000000017'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: bad input parameter
+        '401':
+          description: API key is missing or invalid
+    put:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - developers
+      summary: update an product item
+      operationId: addProduct
+      description: Update an item into the database
+      parameters:
+        - in: path
+          name: code
+          description: pass an search code for looking up inventory
+          required: true
+          example: '0000000000017'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: item updated
+        '400':
+          description: 'invalid input, object invalid'
+        '401':
+          description: API key is missing or invalid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductItem'
+        description: Product item updated
+    delete:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - developers
+      summary: mark the status of a product as trash
+      operationId: deleteProduct
+      description: Delete an item into the database (mark as trash status)
+      parameters:
+        - in: path
+          name: code
+          description: required field to search for the product
+          required: true
+          example: '0000000000017'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: item deleted
+        '400':
+          description: 'invalid input, object invalid'
+        '401':
+          description: API key is missing or invalid
+  /:
+    get:
+      tags:
+        - developers
+      summary: Api details
+      operationId: apiInfo
+      description: |
+        returns information about the api and crontab
+      responses:
+        '200':
+          description: return info from api and crontab
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiInfoItem'
+        '400':
+          description: bad input parameter
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_token
+  schemas:
+    ProductItem:
+      type: object
+      required:
+        - code
+        - status
+      properties:
+        code:
+          type: string
+          example: 0000000000017
+        status:
+          type: string
+          enum: [draft, trash, published]
+          example: 'draft'
+        url:
+          type: string
+          example: 'https://app.swaggerhub.com/apis/DiogoMPSantos/products-parser/1.0.0#/ProductItem'
+        creator:
+          type: string
+          example: 'DiogoMPSantos'
+        imported_t:
+          type: string
+          format: date
+          example: '2023-04-15'
+        product_name:
+          type: string
+          example: 'Feijao'
+        quantity:
+          type: string
+          example: '0'
+        brands:
+          type: string
+          example: 'La Cestera'
+        categories:
+          type: string
+          example: 'Lanches comida, Lanches doces, Biscoitos e Bolos, Bolos, Madalenas'
+        labels:
+          type: string
+          example: 'Contem gluten, Contém derivados de ovos, Contém ovos'
+        cities:
+          type: string
+          example: 'Parintins'
+        purchase_places:
+          type: string
+          example: 'Braga,Portugal'
+        stores:
+          type: string
+          example: 'Lidl'
+        ingredients_text:
+          type: string
+          example: 'farinha de trigo, açúcar, óleo vegetal de girassol, clara de ovo, ovo, humidificante (sorbitol), levedantes químicos (difosfato dissódico, hidrogenocarbonato de sódio), xarope de glucose-frutose, sal, aroma'
+        traces:
+          type: string
+          example: 'Frutos de casca rija,Leite,Soja,Sementes de sésamo,Produtos à base de sementes de sésamo'
+        serving_size:
+          type: string
+          example: 'madalena 31.7 g'
+        serving_quantity:
+          type: string
+          example: '31.7'
+        nutriscore_score:
+          type: string
+          example: '17'
+        nutriscore_grade:
+          type: string
+          example: 'd'
+        main_category:
+          type: string
+          example: 'en:madeleines'
+        image_url:
+          type: string
+          example: 'https://static.openfoodfacts.org/images/products/20221126/front_pt.5.400.jpg'
+    ApiInfoItem:
+      type: object
+      properties:
+        api_version:
+          type: integer
+          example: 1
+        crontab_log:
+          type: integer
+          example: 'log example'
+        crontab_last_execution:
+          type: string
+          example: '2023-04-15 03:56:25'
