@@ -16,15 +16,8 @@ This is a challenge by [Coodesh](https://coodesh.com/)
    - docker-compose build <br />
  ### Subir container docker
    - docker-compose up <br />
- ### Adiconar enviroment file
-   - docker-compose exec php cp .env.example .env <br />
- ### Gerar chave da aplicação
-   - docker-compose exec php php artisan key:generate <br />
- ### Rodar migrations no banco
-   - docker-compose exec php php artisan migrate:fresh --seed <br />
- ### Rodar link da pasta storage e adionar permissoes
-   - docker-compose exec php php artisan storage:link
-   - docker-compose exec php chmod -R 777 /var/www/html/storage 
+ ### Executar setup do projeto (obs: Aguardar containers serem startados)   
+   - docker-compose exec php sh /bin/scripts/setup.sh <br />
  
  Foi adicionado a configuração para verificar a cada minuto se existem crons para serem executadas <br />
  Laravel fornece uma ferramenta de Schedule e neste projeto foi definido para 1 vez ao dia as 00:00 que normalmente é fora do horario comercial em sistemas reais <br />
