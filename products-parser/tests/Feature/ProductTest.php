@@ -18,7 +18,9 @@ class ProductTest extends TestCase
      */
     public function test_list_paginate_products()
     {
-        $response = $this->getJson('/api/products');
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->getJson('/api/products');
         $response->assertJsonCount(20, 'data');    
     }
 
@@ -35,7 +37,9 @@ class ProductTest extends TestCase
     public function test_find_product()
     {
         $product = Product::where('status', 'draft')->first();
-        $response = $this->getJson("/api/products/{$product->code}");
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->getJson("/api/products/{$product->code}");
         $response->assertJsonFragment(['code' => $product->code]);
         $response->assertJsonCount(1, 'product'); 
         
@@ -72,14 +76,18 @@ class ProductTest extends TestCase
     public function test_not_find_product()
     {
         $code = 0;
-        $response = $this->getJson("/api/products/$code");
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->getJson("/api/products/$code");
         $response->assertJsonFragment(['message' => "no results found for code {$code}"]);
     }
 
     public function test_delete_product()
     {
         $product = Product::where('status', 'draft')->first();
-        $response = $this->deleteJson("/api/products/{$product->code}");
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->deleteJson("/api/products/{$product->code}");
         $response->assertJsonFragment(['message' => 'Product with code '.$product->code. ' has been successfully deleted']);
 
         $product = Product::where('code', $product->code)->first();
@@ -89,7 +97,9 @@ class ProductTest extends TestCase
     public function test_not_delete_product()
     {
         $code = 0;
-        $response = $this->deleteJson("/api/products/$code");
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->deleteJson("/api/products/$code");
         $response->assertJsonFragment(['message' => "no results found for code {$code}"]);
     }
 
@@ -120,7 +130,9 @@ class ProductTest extends TestCase
             "image_url" => "https://github.com/DiogoMPSantos/products-parser-challenge"
         ];
 
-        $response = $this->putJson("/api/products/{$product->code}", $body);
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->putJson("/api/products/{$product->code}", $body);
         $response->assertJsonFragment(['message' => 'Product with code '.$product->code. ' has been successfully updated']);
 
         $product = Product::where('code', $product->code)->first();
@@ -142,12 +154,16 @@ class ProductTest extends TestCase
             "image_url" => "https://github.com/DiogoMPSantos/products-parser-challenge"
         ];
 
-        $response = $this->putJson("/api/products/{$product->code}", $body);
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->putJson("/api/products/{$product->code}", $body);
         $response->assertJsonFragment(['message' => 'The url must be a valid URL.']);
 
         $body["url"] = "https://github.com/DiogoMPSantos/products-parser-challenge";
         $body["status"] = "invalid status";
-        $response = $this->putJson("/api/products/{$product->code}", $body);
+        $response = $this->withHeaders([
+            'api_token' => env('API_KEY'),
+        ])->putJson("/api/products/{$product->code}", $body);
         $response->assertJsonFragment(['message' => 'The selected status is invalid.']);
     }
 }
