@@ -6,6 +6,7 @@ This is a challenge by [Coodesh](https://coodesh.com/)
 
 ## Tecnologias
  - PHP
+ - PHPUnit
  - Framework Laravel
  - Mysql
  - Docker
