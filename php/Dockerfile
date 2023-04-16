@@ -10,3 +10,5 @@ COPY ./products-parser/ /var/www/html/
 # These line for /setup.sh
 COPY php/setup.sh /bin/scripts/setup.sh
 RUN chmod +x /bin/scripts/setup.sh
+
+RUN echo "* * * * * cd /var/www/html/ && php artisan schedule:run" >> /var/spool/cron/crontabs/root

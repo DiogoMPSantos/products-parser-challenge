@@ -13,3 +13,6 @@
 
 # Popular banco com os primeiros 100 registros
    cd /var/www/html && php artisan product:import
+
+# Start crontab
+   crond
